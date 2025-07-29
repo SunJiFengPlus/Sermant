@@ -18,8 +18,11 @@ package io.sermant.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.context.annotation.Conditional;
 
 /**
  * Startup application
@@ -34,5 +37,20 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class Backend {
     public static void main(String[] args) {
         SpringApplication.run(Backend.class, args);
+    }
+}
+
+/**
+ * WAR deployment configuration
+ *
+ * @author sermant
+ * @since 2025-01-01
+ */
+@Conditional(WarDeploymentCondition.class)
+class WarDeploymentConfig extends SpringBootServletInitializer {
+    
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Backend.class);
     }
 }
